@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layout.app')
 
 @section('content')
 
@@ -26,10 +26,9 @@
                                 </div>
                             </div>
                         </li>
-                    @endforeach
                 </ul>
             </div>
         </div>
     </div>
 
-@stop
+    @stop
