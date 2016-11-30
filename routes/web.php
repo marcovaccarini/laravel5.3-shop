@@ -19,3 +19,16 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index');
+
+
+/** Get the view for Cart Page **/
+Route::get('/cart', array(
+    'before' => 'auth.basic',
+    'as'     => 'cart',
+    'uses'   => 'CartController@showCart'
+));
+/** Add items in the cart **/
+Route::post('/cart/add', array(
+    'before' => 'auth.basic',
+    'uses'   => 'CartController@postAddToCart'
+));

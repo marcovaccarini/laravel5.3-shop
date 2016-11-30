@@ -6,28 +6,30 @@ use App\Cart;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Validation\Validator;
-use Illuminate\View\View;
+use App\Http\Controllers\Controller;
+
+
 
 class CartController extends Controller
 {
-    public function postAddToCart()
+    public function postAddToCart(Request $request)
     {
-        $rules = array(
+
+
+        $this->validate($request, [
             'quantity' => 'required|numeric',
-            'product'  => 'required|numeric|exists:product,id'
-        );
+            'product'  => 'required|numeric|exists:products,id'
+        ]);
 
-        $validator = Validator::make(Input::all(), $rules);
 
-        if ($validator->fails())
-        {
-            return Redirect::route('index')->with('error', 'The product could not been added to your cart!')
-        }
 
-        $user_id = Auth::user()->id;
+
+
+
+        $user_id = Auth::id();
         $product_id = Input::get('product');
         $quantity = Input::get('quantity');
 
@@ -38,7 +40,9 @@ class CartController extends Controller
 
         if($count){
 
-            return Redirect::route('index')->with('error', 'The product is already in your cart!')
+
+            //return redirect('home')->with('error', 'The product is already in your cart!');
+            return redirect('home')->with('status', 'The product is already in your cart!');
         }
 
         Cart::create(array(
@@ -48,11 +52,12 @@ class CartController extends Controller
             'total' => $total
         ));
 
-        return Redirect::route('cart');
+
+        return redirect('cart');
 
     }
 
-    public function getIndex()
+    public function showCart()
     {
         $user_id = Auth::user()->id;
 
@@ -62,10 +67,11 @@ class CartController extends Controller
 
         if(!$cart_products){
 
-            return Redirect::route('index')->with('error', 'Your Cart is empty!');
+
+            return redirect('home')->with('error', 'Your Cart is empty!');
         }
 
-        return View::make('cart')
+        return view('cart')
             ->with('cart_products', $cart_products)
             ->with('cart_total', $cart_total);
     }

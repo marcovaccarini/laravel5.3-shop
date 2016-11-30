@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('layout.main')
 
 @section('content')
 
@@ -14,6 +14,7 @@
                                     <p>Brand: <b>{{$product->description}}</b></p>
                                     <p>Price: <b>{{$product->price}}</b> </p>
                                     <form action="/cart/add" name="add_to_cart" method="post" accept-charset="UTF-8">
+
                                         <input type="hidden" name="product" value="{{$product->id}}" />
                                         <select name="quantity">
                                             <option value="1">1</option>
