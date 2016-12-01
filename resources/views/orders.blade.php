@@ -3,56 +3,61 @@
 @section('content')
 
     <div class="container">
-        <h1>Your Cart</h1>
+        <h1>Your Orders</h1>
         con status
         @if (session('status'))
             <div class="alert alert-success">
                 {{ session('status') }}
             </div>
         @endif
-        <table class="table">
-            <tbody>
-            <tr>
-                <td><b>Product</b></td>
-                <td><b>Quantity</b></td>
-                <td><b>Price</b></td>
-                <td><b>Total</b></td>
-                <td><b>Delete</b></td>
-            </tr>
-            @foreach($cart_products as $cart_item)
-                <tr>
-                    <td>{{$cart_item->Products->product_name}}</td>
-                    <td>{{$cart_item->quantity}}</td>
-                    <td>{{$cart_item->Products->price}}</td>
-                    <td>{{$cart_item->total}}</td>
-                    <td><a href="{{URL::route('delete_product_from_cart', array($cart_item->id))}}">Delete</a></td>
-
-
-                </tr>
-            @endforeach
-            <tr>
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                    <b>Total</b>
-                </td>
-                <td>
-                    <b>{{$cart_total}}</b>
-                </td>
-                <td>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <h1>Shipping</h1>
-        <form action="/order" method="post" accept-charset="utf-8">
-            {{ csrf_field() }}
-            <label for="delivery_address">Address</label>
-            <textarea name="delivery_address" id="" rows="5"></textarea>
-            <button class="btn btn-block btn-primary btn-large">Place Order</button>
-        </form>
-    </div>
+        <div class="menu">
+            <div class="accordion">
+                @foreach($orders as $order)
+                    <div class="accordion-group">
+                        <div class="accordion-heading country">
+                            <h4>
+                                Order: Order #{{$order->id}} - {{$order->created_at}}
+                            </h4>
+                        </div>
+                        <div class="accordion-body" id="order{{$order->id}}">
+                            <div class="accordion-inner">
+                                <table class="table table-striped table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($order->orderItems as $orderItem)
+                                        <tr>
+                                            <td>{{$orderItem->product_name}}</td>
+                                            <td>{{$orderItem->pivot->quantity}}</td>
+                                            <td>{{$orderItem->pivot->price}}</td>
+                                            <td>{{$orderItem->pivot->total}}</td>
+                                        </tr>
+                                    @endforeach
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td><b>Total</b></td>
+                                            <td><b>{{$order->total}}</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Shipping address</b></td>
+                                            <td>{{$order->delivery_address}}</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
 
 @stop

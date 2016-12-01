@@ -42,11 +42,12 @@ class OrderController extends Controller
                 'price' => $order_products->Products->price,
                 'total' => $order_products->Products->price*$order_products->quantity
             ));
-
-            Cart::where('user_id', '=', $user_id)->delete();
-
-            return redirect('home')->with('status', 'Your order processed successfully!');
         }
+
+        Cart::where('user_id', '=', $user_id)->delete();
+
+        return redirect('home')->with('status', 'Your order processed successfully!');
+
 
     }
 
@@ -59,7 +60,7 @@ class OrderController extends Controller
             return redirect('home')->with('status', 'There is no order.');
         }
 
-        return view('order')->with('orders', $orders);
+        return view('orders')->with('orders', $orders);
 
     }
 }
