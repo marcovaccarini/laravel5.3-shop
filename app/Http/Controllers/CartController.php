@@ -75,4 +75,34 @@ class CartController extends Controller
 
         return Redirect::route('cart');
     }
+
+    public function update()
+    {
+        $user_id = Auth::user()->id;
+
+        $quantity = Input::get('quantity');
+
+        $product_id = Input::get('product');
+
+        $cart_id = Input::get('cart_id');
+
+        // Find the ID of the products in the Cart
+        $product = Product::find($product_id);
+
+        $total = $quantity * $product->price;
+
+        $cart = Cart::where('user_id', '=', $user_id)
+            ->where('product_id', '=', $product_id)
+            ->where('id', '=', $cart_id);
+
+        //  Update the cart
+        $cart->update(array(
+            'user_id'    => $user_id,
+            'product_id' => $product_id,
+            'quantity'   => $quantity,
+            'total'      => $total
+        ));
+        //dd($quantity);
+        return redirect()->route('cart');
+    }
 }

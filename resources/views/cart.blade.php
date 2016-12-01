@@ -22,7 +22,18 @@
             @foreach($cart_products as $cart_item)
                 <tr>
                     <td>{{$cart_item->Products->product_name}}</td>
-                    <td>{{$cart_item->quantity}}</td>
+                    <td>
+                        <form action="/cart/update" method="post" class="form-inline">
+                            {!! csrf_field() !!}
+                            <input type="hidden" name="product" value="{{$cart_item->products->id}}" />
+                            <input type="hidden" name="cart_id" value="{{$cart_item->id}}" />
+                            <div class="form-group">
+                                <input type="text" name="quantity" value="{{$cart_item->quantity}}">
+
+                                <button class="btn btn-sm btn-default">Refresh</button>
+                            </div>
+                        </form>
+                    </td>
                     <td>{{$cart_item->Products->price}}</td>
                     <td>{{$cart_item->total}}</td>
                     <td><a href="{{URL::route('delete_product_from_cart', array($cart_item->id))}}">Delete</a></td>

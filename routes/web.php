@@ -41,7 +41,10 @@ Route::get('/cart/delete/{id}', array(
     'as'     => 'delete_product_from_cart',
     'uses'   => 'CartController@getDelete'
 ));
-
+/** Update items in the cart **/
+Route::post('/cart/update', [
+    'uses' => 'CartController@update'
+]);
 
 Route::post('/order', array('before'=>'auth.basic','uses'=>'OrderController@postOrder'));
 Route::get('/user/orders', array('before'=>'auth.basic','uses'=>'OrderController@getIndex'));
