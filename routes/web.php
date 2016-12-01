@@ -27,8 +27,24 @@ Route::get('/cart', array(
     'as'     => 'cart',
     'uses'   => 'CartController@showCart'
 ));
+
+
 /** Add items in the cart **/
 Route::post('/cart/add', array(
     'before' => 'auth.basic',
     'uses'   => 'CartController@postAddToCart'
 ));
+
+/** Delete items in the cart **/
+Route::get('/cart/delete/{id}', array(
+    'before' => 'auth.basic',
+    'as'     => 'delete_product_from_cart',
+    'uses'   => 'CartController@getDelete'
+));
+
+
+Route::post('/order', array('before'=>'auth.basic','uses'=>'OrderController@postOrder'));
+
+
+
+

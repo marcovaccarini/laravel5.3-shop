@@ -24,11 +24,6 @@ class CartController extends Controller
             'product'  => 'required|numeric|exists:products,id'
         ]);
 
-
-
-
-
-
         $user_id = Auth::id();
         $product_id = Input::get('product');
         $quantity = Input::get('quantity');
@@ -39,7 +34,6 @@ class CartController extends Controller
         $count = Cart::where('product_id', '=', $product_id)->where('user_id', '=', $user_id)->count();
 
         if($count){
-
 
             //return redirect('home')->with('error', 'The product is already in your cart!');
             return redirect('home')->with('status', 'The product is already in your cart!');
@@ -66,7 +60,6 @@ class CartController extends Controller
         $cart_total = Cart::with('products')->where('user_id', '=', $user_id)->sum('total');
 
         if(!$cart_products){
-
 
             return redirect('home')->with('error', 'Your Cart is empty!');
         }
