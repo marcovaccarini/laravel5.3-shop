@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Cart;
 use App\Order;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -13,12 +14,12 @@ class OrderController extends Controller
 {
     public function postOrder(Request $request)
     {
-        /*$this->validate($request, [
-            'address' => 'required',
-        ]);*/
+        $this->validate($request, [
+            'delivery_address' => 'required',
+        ]);
 
         $user_id = Auth::id();
-        $address = Input::get('delivery_address');
+        $delivery_address = Input::get('delivery_address');
 
         $cart_products = Cart::with('Products')->where('user_id', '=', $user_id)->get();
 
@@ -28,10 +29,9 @@ class OrderController extends Controller
             return redirect('home')->with('status', 'Your cart is empty!');
         }
 
-        $order = Order::create(
-            array(
+        $order = Order::create(array(
                 'user_id' => $user_id,
-                'address' => $address,
+                'delivery_address' => $delivery_address,
                 'total'   => $cart_total,
             ));
 
@@ -47,6 +47,19 @@ class OrderController extends Controller
 
             return redirect('home')->with('status', 'Your order processed successfully!');
         }
+
+    }
+
+    public function getIndex()
+    {
+        $user_id = Auth::id();
+
+        $orders = Order::with('orderItems')->where('user_id', '=', $user_id)->get();
+        if(!$orders) {
+            return redirect('home')->with('status', 'There is no order.');
+        }
+
+        return view('order')->with('orders', $orders);
 
     }
 }

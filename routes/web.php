@@ -44,6 +44,7 @@ Route::get('/cart/delete/{id}', array(
 
 
 Route::post('/order', array('before'=>'auth.basic','uses'=>'OrderController@postOrder'));
+Route::get('/user/orders', array('before'=>'auth.basic','uses'=>'OrderController@getIndex'));
 
 
 

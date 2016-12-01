@@ -8,6 +8,7 @@ class Order extends Model
 {
     protected $table = 'orders';
 
+
     /**
      * Only if the delivery address is different from the user address
      *
@@ -33,5 +34,6 @@ class Order extends Model
     public function orderItems()
     {
         return $this->belongsToMany('App\Product')->withPivot('quantity', 'price', 'total');
+
     }
 }
